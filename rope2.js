@@ -4,8 +4,8 @@
 
 <canvas id="Canvas0" width="400" height="400"
 style="position: absolute; left: 0; top: 0; z-index: 0;"></canvas>
-<canvas id="Canvas1" width="400" height="400">
-style="position: absolute; left: 0; top: 0; z-index: 1;"</canvas>
+<canvas id="Canvas1" width="400" height="450"
+style="position: absolute; left: 0; top: 0; z-index: 1;"></canvas>
 
 <script>
 var c1 = document.getElementById("Canvas1");
@@ -16,22 +16,39 @@ var t=0, procSwing, procDrop
 
 var rope={xTop: 150, yTop: 0, len: 150, ang: 0.2}
 var box= {xMid: 150, yTop: 150, w: 40, h: 30}
-ct1.fillRect(0,395,400,5)
+var howHigh=370, xLast=170
+start()
+
+function start(){
+ct1.fillRect(0,400,400,10)
+ct1.fillRect(xLast-box.w/2,390, box.w,20)
 procSwing=setInterval(web,25)
 window.addEventListener("keypress", drop)
+}
 
 function drop(){
+ window.removeEventListener("keypress", drop)
  clearInterval(procSwing)
  procDrop=setInterval(fall,25)
 }
 
 function fall(){
+ 
  box.yTop+=5
+ if(box.yTop>howHigh && Math.abs(box.xMid-xLast)<.8*box.w){
+  clearInterval(procDrop)
+  ct0.fillStyle="green"
+  ct0.fillRect(box.xMid-(box.w/2),box.yTop, box.w, box.h)
+  howHigh-=box.h
+  xLast=box.xMid
+  start()
+  return}
+ if(box.yTop>430){
+  clearInterval(procDrop)
+  alert("Game Over " )
+  return
+ }
  drawBox()
- if(box.yTop>365){clearInterval(procDrop)
- ct0.fillRect(box.xMid-(box.w/2),box.yTop, box.w, box.h)
- t=0
- procSwing=setInterval(web,25)}
 }
 
 
